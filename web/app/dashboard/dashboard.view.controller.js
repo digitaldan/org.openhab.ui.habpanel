@@ -35,13 +35,7 @@
         resizehandler();
     });
 
-    OHService.onUpdate($scope, '', function () {
-        vm.ready = true;
-        // for sliders
-        $timeout(function () {
-            $scope.$broadcast('rzSliderForceRender');
-        });
-    });
+    OHService.onUpdate($scope, '', setReady);
 
     activate();
 
@@ -59,7 +53,19 @@
                 snapper.disable();
             })
         }
+        //if we have items cached, show those while we refresh
+        if($rootScope.items && $rootScope.items.length){
+            setReady();
+        }
     }
+
+    function setReady() {
+        vm.ready = true;
+        // for sliders
+        $timeout(function () {
+            $scope.$broadcast('rzSliderForceRender');
+        });
+    };
 
     vm.refresh = function() {
         OHService.reloadItems();
